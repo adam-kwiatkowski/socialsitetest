@@ -1,0 +1,47 @@
+{% extends "posts/base.html" %} 
+{% block content %}
+{% load humanize %}
+
+<style>
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+    }
+
+    /* main > .container {
+        padding: 70px 15px 0;
+    } */
+</style>
+
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-auto">
+            <img src="{{user.userprofile.avatar.url}}" alt="profile picture" class="rounded-circle border profile-picture">
+        </div>
+        <div class="col">
+            <h1 class="font-weight-light">{{user}}</h1>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-sm-8">
+            {% for post in post_list %}
+            <div class="card mb-4">
+                {% if post.post_images.count > 0 %}
+                    <img src={{post.post_images.first.image.url}} class="card-img-top" alt="post image">
+                {% endif %}
+                <div class="card-body">
+                    <img src={{post.author.userprofile.avatar.url}} class="md-avatar float-left rounded-circle border">
+                    <div class="message">
+                    <h2 class="card-title">{{ post.author }}</h2>
+                    <p class="card-text text-muted h6">{{ post.pub_date|naturaltime}} </p>
+                    <p class="card-text">{{post.text }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

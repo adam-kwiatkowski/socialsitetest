@@ -1,0 +1,80 @@
+{% extends "posts/base.html" %}
+{% block content %}
+{% load humanize %}
+{% load widget_tweaks %}
+<style>
+    /* body {
+        font-family: "Roboto", sans-serif;
+        font-size: 18px;
+        
+    } */
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <button class="btn btn-primary rounded-pill btn-lg btn-block" data-toggle="collapse" href="#createPost"
+                role="button" aria-expanded="false" aria-controls="createPost">Create a post</button>
+            <div class="collapse" id="createPost">
+                <br>
+                <div class="card card-body">
+                    <form action="{% url 'create' %}" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="text">Post content</label>
+                            <input id="text" class="form-control" type="text" name="text" autocomplete="off">
+                        </div>
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                        {% for field in form.visible_fields %}
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <!-- {{field.label_tag}} -->
+                                {% render_field field type="file" class="custom-file-input" autocomplete="off" %}
+                                <!-- <input type="file" class="id_form-0-image" id="form-0-image" accept="image/*"> -->
+                                <label class="custom-file-label text-truncate" for="{{field.id_for_label }}">Choose file</label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endfor %}
+                        
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <!-- Blog Entries Column -->
+        <div class="col-md-7 mt-3 left">
+            {% for post in post_list %}
+            <div class="card mb-4">
+                {% if post.post_images.count > 0 %}
+                <img src={{post.post_images.first.image.url}} class="card-img-top" alt="post image">
+                {% endif %}
+                <div class="card-body">
+                    <img src={{post.author.userprofile.avatar.url}} class="md-avatar float-left rounded-circle border">
+                    <div class="message">
+                        <h2 class="card-title">{{ post.author }}</h2>
+                        <p class="card-text text-muted h6">{{ post.pub_date|naturaltime}} </p>
+                        <p class="card-text">{{post.text }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('.custom-file input').change(function (e) {
+        var files = [];
+        for (var i = 0; i < $(this)[0].files.length; i++) {
+            files.push($(this)[0].files[i].name);
+        }
+        $(this).next('.custom-file-label').html(files.join(', '));
+    });
+
+</script>
+{%endblock%}

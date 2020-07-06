@@ -1,0 +1,91 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ławeczka | Logowanie</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: -ms-flexbox;
+            display: flex;
+            -ms-flex-align: center;
+            align-items: center;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            min-height: 100%;
+            /* Fallback for browsers do NOT support vh unit */
+            min-height: 100vh;
+        }
+
+        .form-signin {
+            width: 100%;
+            max-width: 330px;
+            padding: 15px;
+            margin: auto;
+        }
+
+        .form-signin .checkbox {
+            font-weight: 400;
+        }
+
+        .form-signin .form-control {
+            position: relative;
+            box-sizing: border-box;
+            height: auto;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .form-signin .form-control:focus {
+            z-index: 2;
+        }
+    </style>
+</head>
+
+<body class="text-center">
+    <div class="container">
+        {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
+    {% if next %}
+    {% if user.is_authenticated %}
+    <!-- <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p> -->
+    {% else %}
+    <!-- <p>Please login to see this page.</p> -->
+    {% endif %}
+    {% endif %}
+
+    <h1 class="display-4">{% trans "Login"%}</h1>
+    <form class="form-signin" method="post" action="">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username"
+                maxlength="150" required="" id="id_username" class="form-control" placeholder="{{form.username.label}}">
+        </div>
+        <div class="form-group">
+            <input type="password" name="password" autocomplete="current-password" required="" id="id_password"
+                class="form-control" placeholder="{{ form.password.label }}">
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" value="login">Sign in</button>
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+    <br>
+    {# Assumes you setup the password_reset view in your URLconf #}
+    <p><a href="">Lost password?</a></p>
+    </div>
+
+</body>
+
+</html>
