@@ -32,28 +32,28 @@ class Image(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_images')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_images')
 
-    def save(self, *args, **kwargs):
-        im = PILImage.open(self.image)
-        im_io = BytesIO()
+    # def save(self, *args, **kwargs):
+    #     im = PILImage.open(self.image)
+    #     im_io = BytesIO()
 
-        try:
-            for orientation in ExifTags.TAGS.keys() : 
-                if ExifTags.TAGS[orientation]=='Orientation' : break 
-            exif=dict(im._getexif().items())
+    #     try:
+    #         for orientation in ExifTags.TAGS.keys() : 
+    #             if ExifTags.TAGS[orientation]=='Orientation' : break 
+    #         exif=dict(im._getexif().items())
 
-            if exif[orientation] == 3 : 
-                im=im.rotate(180, expand=True)
-            elif exif[orientation] == 6 : 
-                im=im.rotate(270, expand=True)
-            elif exif[orientation] == 8 : 
-                im=im.rotate(90, expand=True)
+    #         if exif[orientation] == 3 : 
+    #             im=im.rotate(180, expand=True)
+    #         elif exif[orientation] == 6 : 
+    #             im=im.rotate(270, expand=True)
+    #         elif exif[orientation] == 8 : 
+    #             im=im.rotate(90, expand=True)
 
-            im.save(im_io, 'JPEG', quality=10)
-            self.image = File(im_io, name=self.image.name)
-            super().save(*args, **kwargs)
+    #         im.save(im_io, 'JPEG', quality=10)
+    #         self.image = File(im_io, name=self.image.name)
+    #         super().save(*args, **kwargs)
 
-        except:
-            traceback.print_exc()
+    #     except:
+    #         traceback.print_exc()
 
         
 
